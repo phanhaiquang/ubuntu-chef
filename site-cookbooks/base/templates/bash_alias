@@ -1,0 +1,2 @@
+alias ll='ls -ltr'
+alias f='find -iname'

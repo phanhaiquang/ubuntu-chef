@@ -1,0 +1,107 @@
+{
+  "name": "proj-application-name",
+  
+  "tz": "Asia/Singapore",
+
+  "run_list": [
+    "recipe[ohai]",
+    "recipe[locale]",
+    "recipe[timezone-ii]",
+    "recipe[hostname]",
+    "recipe[build-essential]",
+    "recipe[git]",
+    "role[sshd]",
+    "recipe[nodejs]",
+    "role[redis_server]",
+    "recipe[postgresql::server]",
+    "recipe[imagemagick]",
+    "recipe[base]"
+  ],
+
+  "deployment": {
+    "provider": "AWS",
+    "host":   "your-server-ip-addr",
+    "user":   "deploy",
+    "group":  "deploy",
+    "home":   "/home/deploy"
+  },
+
+  "postgresql": {
+    "password": { "postgres": false },
+    "enable_pgdg_apt": "true",
+    "initdb_locale": "en_US.UTF-8",
+    "version": "9.3",
+    "client": { "packages": [] }
+  },
+
+  "default_attributes": {
+    "tz": "UTC",
+    "authorization": {
+      "sudo": {
+        "sudoers_defaults": [
+        ],
+        "groups": [
+            "wheel",
+            "admin"
+        ],
+        "users":  [
+            "deploy"
+        ],
+        "agent_forwarding":   true,
+        "include_sudoers_d":  true
+      }
+    },
+    "monit": {
+      "poll_period": 30,
+      "poll_start_delay": false
+    },
+    "build_essential": {
+      "compiletime": true
+    },
+    "nginx": {
+      "user": "deploy",
+      "group": "deploy"
+    }
+  },
+  "override_attributes": {
+    "locale": {
+      "lang": "en_US.UTF-8",
+      "lc_all": "en_US.UTF-8"
+    }
+  },
+
+  "application": {
+    "name": "proj-application-name",
+    "database": {
+      "type":   "postgresql"
+    },
+    "env_vars": {
+      "RACK_ENV": "production",
+      "RAILS_ENV": "production"
+    },
+    "environment": "production",
+    "repository": "your-git-repo",
+    "crontab": [
+    ],
+    "base": {
+      "swapfile": "swap-size-that-is-double-of-server-ram",
+      "host_provider": "aws",
+      "js_package_manager": "yarn",
+      "ruby_version": "2.3.3",
+      "ruby_gemset": "proj-ruby-gemset",
+      "postgres": {
+        "user": "postgres-user",
+        "password": "password"
+      },
+      "ENV": {
+        "REDIS_URL": "redis:*:6379/0",
+        "ELASTICSEARCH_URL": "ES-url",
+        "SENDGRID_USERNAME": "sendgrid-username",
+        "SENDGRID_PASSWORD": "sendgrid-password",
+        "PUMA_WORKERS": "4",
+        "MIN_THREADS": "2",
+        "MAX_THREADS": "16"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "base",
+  "description": "install app dependencies",
+  "run_list": [
+    "recipe[base::default]"
+  ],
+  "default_attributes": {
+  },
+  "chef_type": "role",
+  "json_class": "Chef::Role"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "redis_server",
+  "description": "Redis server",
+  "run_list": [
+    "recipe[redisio]",
+    "recipe[redisio::enable]"
+  ],
+  "default_attributes": {
+    "redisio": {
+      "servers": [
+        {
+          "name": "master",
+          "port": "6379",
+          "unixsocket": "/tmp/redis.sock",
+          "unixsocketperm": "755"
+        }
+      ],
+      "version": "3.2.3",
+      "mirror": "http://download.redis.io/releases"
+    }
+  },
+  "chef_type": "role",
+  "json_class": "Chef::Role"
+}
